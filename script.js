@@ -17,20 +17,18 @@
 
     if (navigator.vibrate) navigator.vibrate(16);
 
-    // Unlock while the envelope is finishing its dissolve so the hero feels immediately tactile.
     window.setTimeout(() => {
       body.classList.remove('is-locked');
-    }, 1540);
+    }, 1940);
 
     window.setTimeout(() => {
       envelope.classList.add('is-open');
       envelope.setAttribute('aria-hidden', 'true');
-    }, 2180);
+    }, 2740);
   }
 
   openButton?.addEventListener('click', openInvitation);
 
-  // The seal itself is the intended interaction, but this gives a forgiving tap target around it on phones.
   envelope?.addEventListener('pointerup', (event) => {
     if (event.target === openButton || envelope.classList.contains('is-opening') || !envelopeCard) return;
     const card = envelopeCard.getBoundingClientRect();
@@ -40,7 +38,6 @@
     if (Math.hypot(event.clientX - cx, event.clientY - cy) <= radius) openInvitation();
   });
 
-  // Soft reveal as each invitation panel enters the viewport. The panels themselves remain physically joined.
   const stageObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting && entry.intersectionRatio > 0.2) entry.target.classList.add('is-active');

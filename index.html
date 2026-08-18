@@ -12,7 +12,7 @@
 
   <link rel="preload" as="image" href="assets/cover.webp" type="image/webp" fetchpriority="high" />
   <link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body class="is-locked">
   <noscript>
@@ -20,7 +20,6 @@
   </noscript>
 
   <main id="experience" class="experience" aria-label="دعوة عقد قران عمر ومروة">
-    <!-- 1. Welcome / hero. The duplicated image layers are clipped to the couple and lantern areas to create subtle independent motion without changing the approved artwork. -->
     <section id="welcome" class="stage stage--hero" aria-label="مرحباً بكم في حفل عقد القران">
       <div class="stage-art hero-scene">
         <img
@@ -41,7 +40,6 @@
       </div>
     </section>
 
-    <!-- 2. Family / invitation details -->
     <section id="families" class="stage" aria-label="تفاصيل عمر ومروة والعائلتين">
       <div class="stage-art">
         <img
@@ -56,28 +54,26 @@
       </div>
     </section>
 
-    <!-- 3. Date / location. The artwork contains the revealed date; the canvases recreate the scratch-to-reveal interaction. -->
     <section id="date" class="stage" aria-label="التاريخ والمكان">
       <div class="stage-art stage-art--interactive" id="dateArt">
         <img
           class="invitation-art"
-          src="assets/date.webp"
+          src="assets/date-v2.webp?v=6"
           width="941"
           height="1672"
-          alt="تاريخ عقد القران ٢٨ نوفمبر ٢٠٢٦، بعد صلاة المغرب، في قاعة في القاهرة، مصر"
+          alt="تاريخ عقد القران ٢٠٢٦ نوفمبر ٢٨، بعد صلاة المغرب، في قاعة في القاهرة، مصر"
           loading="lazy"
           decoding="async"
         />
 
         <div class="scratch-group" aria-label="اكشط البطاقات الذهبية لكشف التاريخ">
-          <div class="scratch-zone scratch-zone--day" data-scratch="day" aria-label="اكشط لكشف اليوم"><canvas></canvas></div>
-          <div class="scratch-zone scratch-zone--month" data-scratch="month" aria-label="اكشط لكشف الشهر"><canvas></canvas></div>
           <div class="scratch-zone scratch-zone--year" data-scratch="year" aria-label="اكشط لكشف السنة"><canvas></canvas></div>
+          <div class="scratch-zone scratch-zone--month" data-scratch="month" aria-label="اكشط لكشف الشهر"><canvas></canvas></div>
+          <div class="scratch-zone scratch-zone--day" data-scratch="day" aria-label="اكشط لكشف اليوم"><canvas></canvas></div>
         </div>
       </div>
     </section>
 
-    <!-- 4. Event timeline -->
     <section id="timeline" class="stage" aria-label="برنامج الحفل">
       <div class="stage-art">
         <img
@@ -93,11 +89,11 @@
     </section>
   </main>
 
-  <!-- Opening envelope: centre gold-light bloom, then a hinged top flap, then a soft reveal into the first invitation page. -->
   <div id="envelope" class="envelope" role="dialog" aria-modal="true" aria-label="افتح دعوة عمر ومروة">
     <div class="envelope-ambient" aria-hidden="true"></div>
 
     <div class="envelope-card" id="envelopeCard" aria-hidden="true">
+      <div class="envelope-preview" aria-hidden="true"></div>
       <div class="envelope-piece envelope-piece--left"></div>
       <div class="envelope-piece envelope-piece--right"></div>
       <div class="envelope-piece envelope-piece--bottom"></div>
@@ -109,6 +105,11 @@
       <div class="opening-light opening-light--vertical"></div>
       <div class="opening-light opening-light--horizontal"></div>
       <div class="opening-light opening-light--spark"></div>
+      <div class="opening-trace opening-trace--nw"></div>
+      <div class="opening-trace opening-trace--ne"></div>
+      <div class="opening-trace opening-trace--sw"></div>
+      <div class="opening-trace opening-trace--se"></div>
+      <div class="sparkle-wash" aria-hidden="true"></div>
       <div class="seal-glow"></div>
     </div>
 
@@ -118,6 +119,6 @@
   </div>
 
   <div class="grain" aria-hidden="true"></div>
-  <script src="script.js"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>
