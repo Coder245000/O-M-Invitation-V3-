@@ -1,0 +1,231 @@
+:root{
+  --ivory:#f9efe2;
+  --ivory-deep:#ead4b7;
+  --champagne:#c89b5e;
+  --gold:#b17a35;
+  --brown:#5c3a23;
+  --ink:#352315;
+  --stage-width:min(100vw, 56.28svh, 620px);
+  --shadow:0 26px 90px rgba(37,21,11,.34);
+  --ease-lux:cubic-bezier(.22,.78,.22,1);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{margin:0;background:#24150d;scroll-behavior:smooth;scroll-snap-type:y proximity}
+body{margin:0;min-width:280px;background:#24150d;color:var(--ink);overflow-x:hidden;font-family:Georgia,"Times New Roman",serif}
+body.is-locked{height:100svh;overflow:hidden;overscroll-behavior:none}
+img{display:block;max-width:100%}
+button{font:inherit}
+
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.noscript{position:fixed;inset:auto 12px 12px;z-index:1000;padding:12px 16px;background:#fff8ed;color:#5e402c;border:1px solid rgba(177,122,53,.45);text-align:center;font:16px/1.7 serif}
+
+/* ---------- Full-screen invitation stages ---------- */
+.experience{position:relative;isolation:isolate;background:#26160e}
+.stage{
+  position:relative;
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  scroll-snap-align:start;
+  isolation:isolate;
+  padding:max(8px,env(safe-area-inset-top)) 0 max(8px,env(safe-area-inset-bottom));
+}
+.stage::before{
+  content:"";
+  position:absolute;
+  inset:-44px;
+  z-index:-3;
+  background-image:var(--stage-art);
+  background-position:center;
+  background-size:cover;
+  filter:blur(30px) saturate(.88) brightness(.74);
+  transform:scale(1.13);
+}
+.stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(80% 52% at 50% 24%,rgba(255,244,224,.27),transparent 70%),
+    linear-gradient(180deg,rgba(46,25,14,.22),rgba(45,25,14,.46));
+  pointer-events:none;
+}
+.stage-art{
+  position:relative;
+  width:var(--stage-width);
+  aspect-ratio:941/1672;
+  overflow:hidden;
+  background:var(--ivory);
+  box-shadow:var(--shadow),0 0 0 1px rgba(255,245,224,.2);
+  opacity:.82;
+  transform:scale(.986) translateY(8px);
+  transition:opacity .9s var(--ease-lux),transform 1.15s var(--ease-lux),filter 1s ease;
+  filter:saturate(.96);
+}
+.stage.is-active .stage-art{opacity:1;transform:scale(1) translateY(0);filter:saturate(1)}
+.invitation-art{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;user-select:none;-webkit-user-drag:none}
+
+/* Fine cinematic edge treatment keeps the generated artwork pristine while making it feel like a live digital card. */
+.stage-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:6;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),inset 0 0 60px rgba(91,56,25,.05);
+  mix-blend-mode:multiply;
+}
+
+/* ---------- Scratch-to-reveal date ---------- */
+.stage-art--interactive{touch-action:pan-y}
+.scratch-group{position:absolute;inset:0;z-index:8;pointer-events:none}
+.scratch-zone{
+  position:absolute;
+  top:46.15%;
+  height:8.55%;
+  border-radius:8%;
+  overflow:hidden;
+  pointer-events:auto;
+  touch-action:none;
+  filter:drop-shadow(0 5px 8px rgba(96,59,25,.16));
+}
+.scratch-zone--day{left:22.0%;width:15.2%}
+.scratch-zone--month{left:42.0%;width:16.0%}
+.scratch-zone--year{left:62.0%;width:15.7%}
+.scratch-zone canvas{display:block;width:100%;height:100%;opacity:1;transition:opacity .7s ease,filter .35s ease;cursor:grab}
+.scratch-zone:active canvas{cursor:grabbing;filter:brightness(1.05)}
+.scratch-zone.is-revealed{pointer-events:none;filter:none}
+.scratch-zone.is-revealed canvas{opacity:0}
+.scratch-zone::after{
+  content:"";
+  position:absolute;
+  inset:-45% -80%;
+  z-index:2;
+  pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,250,229,.6) 48%,rgba(255,255,255,.75) 50%,rgba(255,250,229,.32) 53%,transparent 66%);
+  transform:translateX(-52%) rotate(5deg);
+  animation:foilSweep 3.4s ease-in-out infinite;
+  mix-blend-mode:screen;
+}
+.scratch-zone.is-revealed::after{display:none}
+@keyframes foilSweep{0%,22%{transform:translateX(-55%) rotate(5deg);opacity:0}45%{opacity:.9}72%,100%{transform:translateX(56%) rotate(5deg);opacity:0}}
+
+/* ---------- Envelope opening ---------- */
+.envelope{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  perspective:1500px;
+  transition:visibility 0s linear 1.75s;
+}
+.envelope-ambient{
+  position:absolute;
+  inset:-42px;
+  background:url('assets/cover.webp') center/cover no-repeat;
+  filter:blur(30px) brightness(.72) saturate(.92);
+  transform:scale(1.13);
+}
+.envelope-ambient::after{content:"";position:absolute;inset:0;background:rgba(60,34,17,.22)}
+.envelope-card{
+  position:relative;
+  width:var(--stage-width);
+  aspect-ratio:941/1672;
+  transform-style:preserve-3d;
+  box-shadow:var(--shadow);
+  overflow:visible;
+}
+.envelope-piece{
+  position:absolute;
+  inset:0;
+  background:url('assets/cover.webp') 50% 50% / 100% 100% no-repeat;
+  will-change:transform,opacity,filter;
+  backface-visibility:hidden;
+  transition:transform 1.28s var(--ease-lux),opacity .95s ease,filter .75s ease;
+}
+.envelope-piece--top{clip-path:polygon(0 0,100% 0,50% 53.2%);transform-origin:50% 0;z-index:4}
+.envelope-piece--left{clip-path:polygon(0 0,50% 53.2%,0 100%);transform-origin:0 53.2%;z-index:3}
+.envelope-piece--right{clip-path:polygon(100% 0,100% 100%,50% 53.2%);transform-origin:100% 53.2%;z-index:3}
+.envelope-piece--bottom{clip-path:polygon(0 100%,50% 53.2%,100% 100%);transform-origin:50% 100%;z-index:2}
+.seal-glow{
+  position:absolute;
+  left:50%;top:53.2%;
+  width:21%;aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  z-index:9;
+  pointer-events:none;
+  background:radial-gradient(circle,rgba(255,237,182,.28),rgba(229,171,76,.10) 42%,transparent 70%);
+  filter:blur(3px);
+  animation:sealBreathe 2.7s ease-in-out infinite;
+}
+@keyframes sealBreathe{50%{transform:translate(-50%,-50%) scale(1.16);filter:blur(7px);opacity:.88}}
+.seal-hotspot{
+  position:absolute;
+  z-index:110;
+  left:50%;
+  top:53.2%;
+  transform:translate(-50%,-50%);
+  width:min(22vw,122px);
+  aspect-ratio:1;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  cursor:pointer;
+  outline:none;
+}
+.seal-hotspot::before{
+  content:"";
+  position:absolute;
+  inset:-14%;
+  border-radius:50%;
+  border:1px solid rgba(255,229,174,0);
+  transition:border-color .25s ease,transform .25s ease;
+}
+.seal-hotspot:hover::before,.seal-hotspot:focus-visible::before{border-color:rgba(255,229,174,.85);transform:scale(1.05)}
+
+.envelope.is-opening .seal-hotspot{pointer-events:none;animation:sealPress .38s ease both}
+.envelope.is-opening .seal-glow{animation:none;opacity:0;transition:opacity .35s ease}
+.envelope.is-opening .envelope-piece--top{transform:rotateX(178deg) translateY(-3%);filter:brightness(1.08)}
+.envelope.is-opening .envelope-piece--left{transform:translateX(-112%) rotateZ(-7deg);opacity:.25}
+.envelope.is-opening .envelope-piece--right{transform:translateX(112%) rotateZ(7deg);opacity:.25}
+.envelope.is-opening .envelope-piece--bottom{transform:translateY(110%) rotateX(-10deg);opacity:.16}
+.envelope.is-opening .envelope-ambient{opacity:0;transition:opacity 1.05s ease .22s}
+.envelope.is-open{visibility:hidden;pointer-events:none}
+@keyframes sealPress{50%{transform:translate(-50%,-50%) scale(.88)}100%{transform:translate(-50%,-50%) scale(.95);opacity:0}}
+
+/* A subtle hero reveal timed with the envelope pieces. */
+body:not(.has-opened) #welcome .stage-art{opacity:.72;transform:scale(1.035);filter:brightness(.94) saturate(.93)}
+body.has-opened #welcome .stage-art{animation:heroReveal 1.45s var(--ease-lux) both}
+@keyframes heroReveal{0%{opacity:.75;transform:scale(1.035);filter:brightness(.95)}100%{opacity:1;transform:scale(1);filter:brightness(1)}}
+
+/* ---------- Fine texture ---------- */
+.grain{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  pointer-events:none;
+  opacity:.055;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.48'/%3E%3C/svg%3E");
+}
+
+@media (min-width:760px){
+  .stage{padding-block:28px}
+  .stage-art,.envelope-card{border-radius:3px}
+}
+
+@media (max-height:650px){
+  :root{--stage-width:min(100vw, 56.28svh, 620px)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .stage-art{opacity:1;transform:none}
+}
