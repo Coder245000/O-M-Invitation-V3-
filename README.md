@@ -1,45 +1,44 @@
 # Omer & Marwa — Premium Interactive Wedding Invitation
 
-A mobile-first Arabic digital wedding invitation rebuilt to follow the supplied reference recording and the approved premium ivory/champagne-gold artwork.
+A mobile-first Arabic digital wedding invitation for GitHub Pages, using the supplied approved artwork and a reference-style interactive opening.
 
-## Flow
+## Premium interactions included
 
-1. Full-screen embossed envelope with an **O&M** wax seal.
-2. Tap the seal and the envelope separates/open-reveals the invitation.
-3. Welcome scene for **Omer & Marwa**, with the groom represented as a Black Sudanese man.
-4. Family-details invitation scene.
-5. Interactive scratch-to-reveal date scene: **28 November 2026**.
-6. Venue: **[ Venue] - Cairo, Egypt**.
-7. Wedding-program timeline.
-8. No RSVP page.
+1. Full-screen embossed O&M envelope.
+2. Tap the central wax seal.
+3. A warm gold light ignites at the seal and travels outward in a radial/cross bloom.
+4. The upper envelope flap hinges open in 3D with a champagne-gold inner liner.
+5. The envelope softly dissolves directly into the welcome artwork.
+6. The bride/groom area has subtle cinematic floating motion.
+7. The hanging lantern areas sway independently and their lights gently pulse.
+8. All invitation pages sit on one continuous warm paper background with no dark separators, so scrolling feels like one extended vertical invitation.
+9. Date cards retain the interactive scratch-to-reveal effect.
+10. Reduced-motion accessibility is preserved.
 
 ## Files
 
-- `index.html` — semantic invitation flow and image stages.
-- `style.css` — full-screen composition, envelope animation, premium transitions, scratch overlays, responsive layout.
-- `script.js` — envelope interaction, viewport reveals, scratch-to-reveal implementation.
+- `index.html` — semantic invitation flow, live hero motion layers, and envelope/light layers.
+- `style.css` — opening sequence, continuous-page treatment, hero/lantern motion, transitions, scratch styling, and responsive behavior.
+- `script.js` — envelope timing/interaction, viewport reveals, and scratch-to-reveal implementation.
 - `assets/cover.webp` — envelope artwork.
 - `assets/hero.webp` — welcome/couple artwork.
 - `assets/family.webp` — family-details artwork.
 - `assets/date.webp` — date/time/location artwork.
 - `assets/timeline.webp` — program artwork.
 
-The site is static and has no build step or external JavaScript dependency.
+The project remains fully static: no build step and no external JavaScript dependency.
 
 ## Preview locally
-
-Run any static server in the project folder, for example:
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000` on a phone-sized viewport.
+Then open `http://localhost:8000`.
 
 ## Publish on GitHub Pages
 
-1. Upload the full project, including the `assets` directory, to the repository.
-2. Open **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select `main` and `/ (root)`.
-5. Save and wait for GitHub Pages to publish the site.
+1. Replace the repository's current files with the contents of this folder, keeping the `assets` folder intact.
+2. Commit and push to the branch used by GitHub Pages (normally `main`).
+3. In **Settings → Pages**, keep **Deploy from a branch**, `main`, and `/ (root)` selected.
+4. Allow GitHub Pages a short time to refresh, then hard-refresh the public invitation URL.

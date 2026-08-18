@@ -3,53 +3,51 @@
 
   const body = document.body;
   const envelope = document.getElementById('envelope');
+  const envelopeCard = document.getElementById('envelopeCard');
   const openButton = document.getElementById('openInvitation');
   const stages = [...document.querySelectorAll('.stage')];
 
-  // Keep the first artwork visible underneath the envelope so the opening feels continuous.
   stages[0]?.classList.add('is-active');
 
   function openInvitation() {
-    if (envelope.classList.contains('is-opening')) return;
+    if (!envelope || envelope.classList.contains('is-opening')) return;
 
     envelope.classList.add('is-opening');
     body.classList.add('has-opened');
 
     if (navigator.vibrate) navigator.vibrate(16);
 
+    // Unlock while the envelope is finishing its dissolve so the hero feels immediately tactile.
     window.setTimeout(() => {
       body.classList.remove('is-locked');
-    }, 720);
+    }, 1540);
 
     window.setTimeout(() => {
       envelope.classList.add('is-open');
       envelope.setAttribute('aria-hidden', 'true');
-    }, 1680);
+    }, 2180);
   }
 
-  openButton.addEventListener('click', openInvitation);
+  openButton?.addEventListener('click', openInvitation);
 
-  // The reference opens by touching the central seal. Make a small center area of the artwork respond as well.
-  envelope.addEventListener('pointerup', (event) => {
-    if (event.target === openButton || envelope.classList.contains('is-opening')) return;
-    const card = document.getElementById('envelopeCard').getBoundingClientRect();
+  // The seal itself is the intended interaction, but this gives a forgiving tap target around it on phones.
+  envelope?.addEventListener('pointerup', (event) => {
+    if (event.target === openButton || envelope.classList.contains('is-opening') || !envelopeCard) return;
+    const card = envelopeCard.getBoundingClientRect();
     const cx = card.left + card.width / 2;
     const cy = card.top + card.height * 0.532;
-    const radius = Math.max(50, card.width * 0.13);
+    const radius = Math.max(52, card.width * 0.145);
     if (Math.hypot(event.clientX - cx, event.clientY - cy) <= radius) openInvitation();
   });
 
-  // Soft reveal as each full-screen invitation panel enters the viewport.
+  // Soft reveal as each invitation panel enters the viewport. The panels themselves remain physically joined.
   const stageObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting && entry.intersectionRatio > 0.36) {
-        entry.target.classList.add('is-active');
-      }
+      if (entry.isIntersecting && entry.intersectionRatio > 0.2) entry.target.classList.add('is-active');
     }
-  }, { threshold: [0.18, 0.36, 0.66] });
+  }, { threshold: [0.08, 0.2, 0.45] });
   stages.forEach(stage => stageObserver.observe(stage));
 
-  // Scratch-to-reveal: each gold foil panel sits precisely over the already-rendered day/month/year artwork.
   class ScratchZone {
     constructor(root) {
       this.root = root;
@@ -119,7 +117,6 @@
       ctx.fillStyle = foil;
       ctx.fillRect(0, 0, w, h);
 
-      // Fine diagonal engraved texture, close to the scratch cards shown in the recording.
       ctx.lineWidth = Math.max(.55, w / 210);
       for (let x = -h; x < w + h; x += Math.max(6, w / 17)) {
         ctx.strokeStyle = 'rgba(255,251,237,.28)';
@@ -174,7 +171,7 @@
       const data = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height).data;
       let transparent = 0;
       let sampled = 0;
-      const stride = 64; // 16 pixels at a time; enough for a responsive percentage check.
+      const stride = 64;
       for (let i = 3; i < data.length; i += stride) {
         sampled += 1;
         if (data[i] < 45) transparent += 1;
@@ -199,11 +196,10 @@
     resizeTimer = setTimeout(() => scratchZones.forEach(zone => zone.resize()), 140);
   });
 
-  // When all three date cards are revealed, give the artwork a tiny celebratory lift without adding new UI.
   window.addEventListener('scratch:revealed', () => {
     if (!scratchZones.every(zone => zone.revealed)) return;
     const dateArt = document.getElementById('dateArt');
-    dateArt.animate([
+    dateArt?.animate([
       { filter: 'brightness(1)' },
       { filter: 'brightness(1.035)', offset: .48 },
       { filter: 'brightness(1)' }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ead5bb" />
+  <meta name="theme-color" content="#d2a880" />
   <meta name="color-scheme" content="light" />
   <meta name="description" content="دعوة عقد قران عمر ومروة — ٢٨ نوفمبر ٢٠٢٦، القاهرة" />
   <meta property="og:title" content="Omer & Marwa | دعوة عقد القران" />
@@ -20,11 +20,11 @@
   </noscript>
 
   <main id="experience" class="experience" aria-label="دعوة عقد قران عمر ومروة">
-    <!-- 1. Welcome / hero -->
-    <section id="welcome" class="stage" style="--stage-art:url('assets/hero.webp')" aria-label="مرحباً بكم في حفل عقد القران">
-      <div class="stage-art">
+    <!-- 1. Welcome / hero. The duplicated image layers are clipped to the couple and lantern areas to create subtle independent motion without changing the approved artwork. -->
+    <section id="welcome" class="stage stage--hero" aria-label="مرحباً بكم في حفل عقد القران">
+      <div class="stage-art hero-scene">
         <img
-          class="invitation-art"
+          class="invitation-art hero-base"
           src="assets/hero.webp"
           width="941"
           height="1672"
@@ -32,11 +32,17 @@
           fetchpriority="high"
           decoding="async"
         />
+
+        <img class="hero-motion hero-motion--couple" src="assets/hero.webp" width="941" height="1672" alt="" aria-hidden="true" />
+        <img class="hero-motion hero-motion--lantern-left" src="assets/hero.webp" width="941" height="1672" alt="" aria-hidden="true" />
+        <img class="hero-motion hero-motion--lantern-right" src="assets/hero.webp" width="941" height="1672" alt="" aria-hidden="true" />
+        <span class="lantern-light lantern-light--left" aria-hidden="true"></span>
+        <span class="lantern-light lantern-light--right" aria-hidden="true"></span>
       </div>
     </section>
 
     <!-- 2. Family / invitation details -->
-    <section id="families" class="stage" style="--stage-art:url('assets/family.webp')" aria-label="تفاصيل عمر ومروة والعائلتين">
+    <section id="families" class="stage" aria-label="تفاصيل عمر ومروة والعائلتين">
       <div class="stage-art">
         <img
           class="invitation-art"
@@ -51,7 +57,7 @@
     </section>
 
     <!-- 3. Date / location. The artwork contains the revealed date; the canvases recreate the scratch-to-reveal interaction. -->
-    <section id="date" class="stage" style="--stage-art:url('assets/date.webp')" aria-label="التاريخ والمكان">
+    <section id="date" class="stage" aria-label="التاريخ والمكان">
       <div class="stage-art stage-art--interactive" id="dateArt">
         <img
           class="invitation-art"
@@ -64,21 +70,15 @@
         />
 
         <div class="scratch-group" aria-label="اكشط البطاقات الذهبية لكشف التاريخ">
-          <div class="scratch-zone scratch-zone--day" data-scratch="day" aria-label="اكشط لكشف اليوم">
-            <canvas></canvas>
-          </div>
-          <div class="scratch-zone scratch-zone--month" data-scratch="month" aria-label="اكشط لكشف الشهر">
-            <canvas></canvas>
-          </div>
-          <div class="scratch-zone scratch-zone--year" data-scratch="year" aria-label="اكشط لكشف السنة">
-            <canvas></canvas>
-          </div>
+          <div class="scratch-zone scratch-zone--day" data-scratch="day" aria-label="اكشط لكشف اليوم"><canvas></canvas></div>
+          <div class="scratch-zone scratch-zone--month" data-scratch="month" aria-label="اكشط لكشف الشهر"><canvas></canvas></div>
+          <div class="scratch-zone scratch-zone--year" data-scratch="year" aria-label="اكشط لكشف السنة"><canvas></canvas></div>
         </div>
       </div>
     </section>
 
     <!-- 4. Event timeline -->
-    <section id="timeline" class="stage" style="--stage-art:url('assets/timeline.webp')" aria-label="برنامج الحفل">
+    <section id="timeline" class="stage" aria-label="برنامج الحفل">
       <div class="stage-art">
         <img
           class="invitation-art"
@@ -93,14 +93,22 @@
     </section>
   </main>
 
-  <!-- Opening envelope. Four perfectly aligned image slices separate to reveal the first invitation scene underneath. -->
+  <!-- Opening envelope: centre gold-light bloom, then a hinged top flap, then a soft reveal into the first invitation page. -->
   <div id="envelope" class="envelope" role="dialog" aria-modal="true" aria-label="افتح دعوة عمر ومروة">
     <div class="envelope-ambient" aria-hidden="true"></div>
+
     <div class="envelope-card" id="envelopeCard" aria-hidden="true">
-      <div class="envelope-piece envelope-piece--top"></div>
       <div class="envelope-piece envelope-piece--left"></div>
       <div class="envelope-piece envelope-piece--right"></div>
       <div class="envelope-piece envelope-piece--bottom"></div>
+
+      <div class="envelope-flap-liner"></div>
+      <div class="envelope-piece envelope-piece--top"></div>
+
+      <div class="opening-light opening-light--halo"></div>
+      <div class="opening-light opening-light--vertical"></div>
+      <div class="opening-light opening-light--horizontal"></div>
+      <div class="opening-light opening-light--spark"></div>
       <div class="seal-glow"></div>
     </div>
 
