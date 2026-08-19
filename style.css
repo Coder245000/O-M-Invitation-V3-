@@ -11,6 +11,8 @@
   --envelope-width:min(100vw,56.28svh,var(--max-card));
   --ease-lux:cubic-bezier(.20,.78,.18,1);
   --ease-silk:cubic-bezier(.32,.05,.12,1);
+  /* near-linear: the light head travels at a steady, followable rate */
+  --ease-flow:cubic-bezier(.34,.16,.58,.9);
   --seam-overlap:clamp(42px,8vw,72px);
 }
 
@@ -31,7 +33,6 @@ button{font:inherit}
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 .noscript{position:fixed;inset:auto 12px 12px;z-index:1000;padding:12px 16px;background:#fff8ed;color:#5e402c;border:1px solid rgba(177,122,53,.45);text-align:center;font:16px/1.7 serif}
 
-/* ---------- One continuous premium paper strip ---------- */
 .experience{
   position:relative;
   width:var(--stage-width);
@@ -63,8 +64,6 @@ button{font:inherit}
   will-change:transform,opacity;
 }
 .stage.is-active .stage-art{opacity:1;transform:translateY(0) scale(1);filter:saturate(1) contrast(1)}
-
-/* The top of every following page softly feathers into the previous page. This makes the floral frames overlap like interlocking pieces rather than separate cards. */
 .stage:not(:first-child) .stage-art{
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.28) 18px,#000 calc(var(--seam-overlap) + 26px),#000 100%);
   mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.28) 18px,#000 calc(var(--seam-overlap) + 26px),#000 100%);
@@ -79,10 +78,7 @@ button{font:inherit}
   background:linear-gradient(to bottom,rgba(247,234,217,0),rgba(247,234,217,.08) 44%,rgba(255,246,233,.11) 70%,transparent);
   mix-blend-mode:screen;
 }
-.invitation-art,.motion-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;user-select:none;-webkit-user-drag:none}
-.invitation-art{z-index:1}
-
-/* No hard card shadow or dark surround: the browser canvas is the same ivory/champagne family as the artwork. */
+.invitation-art{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;user-select:none;-webkit-user-drag:none;z-index:1}
 .stage-art::after{
   content:"";
   position:absolute;
@@ -92,76 +88,6 @@ button{font:inherit}
   box-shadow:inset 0 0 0 1px rgba(255,250,241,.08),inset 0 0 44px rgba(116,75,36,.025);
 }
 
-/* ---------- Living artwork: couple + hanging lanterns ---------- */
-.motion-layer{z-index:5;pointer-events:none}
-.couple-layer{
-  opacity:.84;
-  clip-path:polygon(25% 56%,75% 56%,85% 98%,15% 98%);
-  -webkit-mask-image:radial-gradient(ellipse 43% 34% at 50% 80%,#000 34%,rgba(0,0,0,.96) 54%,transparent 79%);
-  mask-image:radial-gradient(ellipse 43% 34% at 50% 80%,#000 34%,rgba(0,0,0,.96) 54%,transparent 79%);
-  transform-origin:50% 88%;
-}
-body.has-opened .stage--hero.is-active .couple-layer{
-  animation:coupleArrival 2.9s var(--ease-lux) 1.05s both,coupleWalk 5.4s ease-in-out 4.0s infinite alternate;
-}
-@keyframes coupleArrival{
-  0%{transform:translateY(24px) scale(.991);opacity:0}
-  38%{opacity:.52}
-  100%{transform:translateY(0) scale(1);opacity:.84}
-}
-@keyframes coupleWalk{
-  0%{transform:translate3d(-1px,2px,0) scale(1)}
-  50%{transform:translate3d(1px,-3px,0) scale(1.003)}
-  100%{transform:translate3d(0,-6px,0) scale(1.006)}
-}
-
-.lantern-layer{
-  opacity:.0;
-  z-index:6;
-  filter:brightness(1.16) saturate(1.06) drop-shadow(0 0 8px rgba(255,195,92,.28));
-  mix-blend-mode:screen;
-}
-.lantern-layer--left{
-  -webkit-mask-image:radial-gradient(ellipse 14% 24% at 11.5% 42%,#000 18%,rgba(0,0,0,.94) 47%,transparent 76%);
-  mask-image:radial-gradient(ellipse 14% 24% at 11.5% 42%,#000 18%,rgba(0,0,0,.94) 47%,transparent 76%);
-  transform-origin:11.5% 18%;
-}
-.lantern-layer--right{
-  -webkit-mask-image:radial-gradient(ellipse 14% 24% at 88.5% 42%,#000 18%,rgba(0,0,0,.94) 47%,transparent 76%);
-  mask-image:radial-gradient(ellipse 14% 24% at 88.5% 42%,#000 18%,rgba(0,0,0,.94) 47%,transparent 76%);
-  transform-origin:88.5% 18%;
-}
-.stage.is-active .lantern-layer--left{animation:lanternGlowIn 1.5s ease .4s both,lanternLeft 4.8s ease-in-out 1.9s infinite alternate}
-.stage.is-active .lantern-layer--right{animation:lanternGlowIn 1.5s ease .55s both,lanternRight 5.2s ease-in-out 2.05s infinite alternate}
-@keyframes lanternGlowIn{from{opacity:0}to{opacity:.47}}
-@keyframes lanternLeft{
-  0%{transform:rotate(-.22deg) translateX(-1px);opacity:.38;filter:brightness(1.08) saturate(1.02) drop-shadow(0 0 5px rgba(255,195,92,.20))}
-  48%{opacity:.56;filter:brightness(1.22) saturate(1.08) drop-shadow(0 0 13px rgba(255,195,92,.36))}
-  100%{transform:rotate(.34deg) translateX(1.5px);opacity:.44;filter:brightness(1.13) saturate(1.05) drop-shadow(0 0 8px rgba(255,195,92,.28))}
-}
-@keyframes lanternRight{
-  0%{transform:rotate(.24deg) translateX(1px);opacity:.42;filter:brightness(1.11) saturate(1.05) drop-shadow(0 0 7px rgba(255,195,92,.24))}
-  52%{opacity:.58;filter:brightness(1.24) saturate(1.09) drop-shadow(0 0 14px rgba(255,195,92,.38))}
-  100%{transform:rotate(-.32deg) translateX(-1.5px);opacity:.40;filter:brightness(1.10) saturate(1.03) drop-shadow(0 0 6px rgba(255,195,92,.22))}
-}
-body:not(.has-opened) #welcome .lantern-layer{animation:none;opacity:0}
-body.has-opened #welcome .lantern-layer--left{animation:lanternGlowIn 1.45s ease 1.0s both,lanternLeft 4.8s ease-in-out 2.45s infinite alternate}
-body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s ease 1.15s both,lanternRight 5.2s ease-in-out 2.6s infinite alternate}
-.sunset-breathe{
-  position:absolute;
-  z-index:4;
-  left:48%;top:63%;
-  width:36%;aspect-ratio:1;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  pointer-events:none;
-  background:radial-gradient(circle,rgba(255,218,146,.17),rgba(255,209,118,.06) 37%,transparent 70%);
-  mix-blend-mode:screen;
-  animation:sunsetBreathe 5.5s ease-in-out infinite alternate;
-}
-@keyframes sunsetBreathe{to{transform:translate(-50%,-50%) scale(1.16);opacity:.68}}
-
-/* ---------- Scratch-to-reveal date ---------- */
 .stage-art--interactive{touch-action:pan-y}
 .scratch-group{position:absolute;inset:0;z-index:12;pointer-events:none}
 .scratch-zone{
@@ -174,7 +100,6 @@ body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s eas
   touch-action:none;
   filter:drop-shadow(0 5px 8px rgba(96,59,25,.14));
 }
-/* Right-to-left visual order: day (right), month (centre), year (left). */
 .scratch-zone--year{left:22.0%;width:15.2%}
 .scratch-zone--month{left:42.0%;width:16.0%}
 .scratch-zone--day{left:62.0%;width:15.7%}
@@ -217,7 +142,6 @@ body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s eas
   pointer-events:none;
 }
 
-/* ---------- Envelope opening: seal light first, then slow opening ---------- */
 .envelope{
   position:fixed;
   inset:0;
@@ -227,7 +151,6 @@ body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s eas
   overflow:hidden;
   perspective:1600px;
   background:transparent;
-  transition:none;
 }
 .envelope-ambient{
   position:absolute;
@@ -252,49 +175,281 @@ body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s eas
   will-change:transform,opacity,filter;
   backface-visibility:hidden;
 }
-.envelope-piece--top{clip-path:polygon(0 0,100% 0,50% 53.2%);transform-origin:50% 0;z-index:7}
-.envelope-piece--left{clip-path:polygon(0 0,50% 53.2%,0 100%);transform-origin:0 53.2%;z-index:5}
-.envelope-piece--right{clip-path:polygon(100% 0,100% 100%,50% 53.2%);transform-origin:100% 53.2%;z-index:5}
-.envelope-piece--bottom{clip-path:polygon(0 100%,50% 53.2%,100% 100%);transform-origin:50% 100%;z-index:4}
+/* The body of the envelope: everything the top flap is not. Masking the flap
+   region out means the artwork's printed seal lives on the flap only, so it
+   cannot appear twice once the flap lifts, and nothing has to be cut apart. */
+.envelope-piece--sheet{
+  z-index:5;
+  -webkit-mask-image:url('assets/flap-body.webp');
+  mask-image:url('assets/flap-body.webp');
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+
+.reveal-light,
+.reveal-light--inner{
+  position:absolute;
+  inset:-4%;
+  z-index:2;
+  opacity:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 56%,rgba(255,254,248,.98) 0,rgba(255,248,227,.94) 8%,rgba(255,239,196,.72) 18%,rgba(252,223,154,.36) 30%,rgba(244,198,102,.12) 44%,transparent 62%),
+    radial-gradient(circle at 50% 56%,rgba(255,247,211,.42),transparent 58%);
+  mix-blend-mode:screen;
+  filter:blur(8px);
+}
+.reveal-light--inner{
+  inset:10%;
+  z-index:3;
+  background:radial-gradient(circle at 50% 56%,rgba(255,255,252,.99) 0,rgba(255,252,240,.98) 10%,rgba(255,247,217,.9) 24%,rgba(249,223,160,.56) 40%,rgba(245,207,120,.18) 56%,transparent 72%);
+  filter:blur(4px);
+}
 
 .seal-light-system{position:absolute;inset:0;z-index:12;pointer-events:none}
 .seal-core{
   position:absolute;
   left:50%;top:53.2%;
-  width:20%;aspect-ratio:1;
+  width:19.5%;aspect-ratio:1;
   transform:translate(-50%,-50%);
   border-radius:50%;
-  background:radial-gradient(circle,rgba(255,245,208,.25),rgba(245,191,86,.08) 44%,transparent 70%);
-  filter:blur(2px);
+  background:radial-gradient(circle,rgba(255,250,231,.18),rgba(245,191,86,.05) 44%,transparent 70%);
+  filter:blur(1.6px);
   animation:sealIdle 2.8s ease-in-out infinite;
 }
-.seal-letter-light{
+
+/* ── light travelling out from the seal ─────────────────────────────
+   Two stacked layers per flap arm, both pinned to the envelope art:
+   .seam-wash  soft warm spill hugging the flap seam
+   .orn-flow   the engraved arabesque itself, masked from the artwork
+   Each holds an oversized gradient sheet <i> that slides outward along
+   the arm, so the light appears to run from the seal to the corners. */
+/* ── the top flap ───────────────────────────────────────────────────
+   flap-top.webp is the flap's real outline: a pentagon whose diagonals
+   sit on the OUTER edge of the engraved bands (so both bands travel with
+   the flap), unioned with a disc around the wax seal (so the seal lifts
+   whole instead of tearing at the fold). The seal and its letter light
+   live inside .flap-top, so they swing with it. */
+.flap-top{
   position:absolute;
-  top:53.1%;
-  width:2.8%;aspect-ratio:1;
-  border-radius:50%;
-  opacity:0;
-  transform:translate(-50%,-50%) scale(.35);
-  background:radial-gradient(circle,#fffdf2 0,#ffeab7 28%,rgba(255,188,64,.9) 48%,rgba(255,172,49,0) 72%);
-  filter:blur(.6px) drop-shadow(0 0 7px rgba(255,213,125,.95));
+  inset:0;
+  z-index:8;
+  transform-origin:50% 0;
+  transform-style:preserve-3d;
+  will-change:transform;
 }
-.seal-letter-light--o{left:47.2%}
-.seal-letter-light--m{left:52.8%}
-.fold-beam{
+.flap-top__art{
+  position:absolute;
+  inset:0;
+  display:block;
+  background:url('assets/cover.webp') 50% 50% / 100% 100% no-repeat;
+  -webkit-mask-image:url('assets/flap-top.webp');
+  mask-image:url('assets/flap-top.webp');
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  backface-visibility:hidden;
+}
+/* ── backlit paper ─────────────────────────────────────────────────
+   paper-*.webp are the engraved artwork itself, lifted off cover.webp as
+   a fine relief mask. Lighting them makes the light behind the envelope
+   read as if it is seeping through the engraving on every flap, rather
+   than as a glow laid on top. Two copies because the flap moves and the
+   body does not; each is pre-intersected with its own shape. */
+.paper-glow{
+  position:absolute;
+  inset:0;
+  display:block;
+  opacity:0;
+  mix-blend-mode:screen;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  background:
+    radial-gradient(ellipse 74% 52% at 50% 53.2%,rgba(255,247,214,.95) 0,rgba(255,232,170,.8) 34%,rgba(255,214,120,.52) 62%,rgba(255,199,88,.3) 84%,rgba(255,193,80,.2) 100%);
+  pointer-events:none;
+}
+.paper-glow--body{
+  z-index:7;
+  -webkit-mask-image:url('assets/paper-body.webp');
+  mask-image:url('assets/paper-body.webp');
+}
+.paper-glow--flap{
+  z-index:2;
+  -webkit-mask-image:url('assets/paper-flap.webp');
+  mask-image:url('assets/paper-flap.webp');
+}
+
+/* the light waiting inside the envelope, revealed as the flap lifts away */
+.flap-glow{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  opacity:0;
+  -webkit-mask-image:url('assets/flap-glow.webp');
+  mask-image:url('assets/flap-glow.webp');
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  background:
+    radial-gradient(ellipse 58% 40% at 50% 53.2%,#fffdf6 0,rgba(255,250,232,.98) 20%,rgba(255,238,186,.9) 42%,rgba(255,219,132,.62) 66%,rgba(255,202,92,.28) 86%,transparent 100%),
+    linear-gradient(to top,rgba(255,243,206,.95),rgba(255,249,224,.7) 42%,rgba(255,252,240,.45));
+  pointer-events:none;
+}
+
+/* Everything below leans on CSS masks. Without them the flap would rotate as
+   a full-card copy of the artwork, so the mask-dependent layers stay hidden
+   and the envelope simply cross-dissolves instead. */
+.seam-wash,
+.orn-flow,
+.letter-flare,
+.flap-top__art,
+.flap-glow,
+.paper-glow{display:none}
+@supports ((mask-image:url(assets/band-left.webp)) or (-webkit-mask-image:url(assets/band-left.webp))){
+  .seam-wash,
+  .orn-flow,
+  .letter-flare,
+  .flap-top__art,
+  .flap-glow,
+  .paper-glow{display:block}
+  .envelope.is-opening .flap-top{animation:flapSwing 2s cubic-bezier(.3,.26,.55,.9) 3.55s both}
+}
+
+.seam-wash,
+.orn-flow{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  mix-blend-mode:screen;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+}
+.seam-wash--left{-webkit-mask-image:url('assets/wash-left.webp');mask-image:url('assets/wash-left.webp')}
+.seam-wash--right{-webkit-mask-image:url('assets/wash-right.webp');mask-image:url('assets/wash-right.webp')}
+.orn-flow--left{-webkit-mask-image:url('assets/band-left.webp');mask-image:url('assets/band-left.webp')}
+.orn-flow--right{-webkit-mask-image:url('assets/band-right.webp');mask-image:url('assets/band-right.webp')}
+
+.seam-wash > i,
+.orn-flow > i{
+  position:absolute;
+  inset:-70%;
+  display:block;
+  will-change:transform;
+}
+
+/* 318.8deg / 41.2deg are the exact angles of the two flap arms.
+   The bright head sits at 50.7% of the gradient line: the seal edge. */
+.orn-flow--left > i{
+  background:linear-gradient(318.8deg,
+    rgba(255,205,110,0) 0%,rgba(255,205,110,0) 24%,
+    rgba(255,216,136,.5) 33%,rgba(255,231,172,.84) 41.5%,
+    rgba(255,246,214,.98) 47.2%,#fffef8 49.6%,
+    #ffffff 50.7%,rgba(255,252,236,.96) 51.8%,
+    rgba(255,238,182,.6) 53%,rgba(255,228,154,.18) 54.6%,
+    rgba(255,228,154,0) 56.6%,rgba(255,228,154,0) 100%);
+}
+.orn-flow--right > i{
+  background:linear-gradient(41.2deg,
+    rgba(255,205,110,0) 0%,rgba(255,205,110,0) 24%,
+    rgba(255,216,136,.5) 33%,rgba(255,231,172,.84) 41.5%,
+    rgba(255,246,214,.98) 47.2%,#fffef8 49.6%,
+    #ffffff 50.7%,rgba(255,252,236,.96) 51.8%,
+    rgba(255,238,182,.6) 53%,rgba(255,228,154,.18) 54.6%,
+    rgba(255,228,154,0) 56.6%,rgba(255,228,154,0) 100%);
+}
+.seam-wash--left > i{
+  background:linear-gradient(318.8deg,
+    rgba(255,196,96,0) 0%,rgba(255,196,96,0) 16%,
+    rgba(255,206,118,.26) 30%,rgba(255,220,150,.5) 41%,
+    rgba(255,238,190,.74) 47.8%,rgba(255,250,224,.86) 50.7%,
+    rgba(255,236,180,.5) 53.6%,rgba(255,226,152,.16) 56.8%,
+    rgba(255,226,152,0) 60%,rgba(255,226,152,0) 100%);
+}
+.seam-wash--right > i{
+  background:linear-gradient(41.2deg,
+    rgba(255,196,96,0) 0%,rgba(255,196,96,0) 16%,
+    rgba(255,206,118,.26) 30%,rgba(255,220,150,.5) 41%,
+    rgba(255,238,190,.74) 47.8%,rgba(255,250,224,.86) 50.7%,
+    rgba(255,236,180,.5) 53.6%,rgba(255,226,152,.16) 56.8%,
+    rgba(255,226,152,0) 60%,rgba(255,226,152,0) 100%);
+}
+
+/* warm pool under the seal, as the envelope starts to glow from within */
+.seal-spill{
   position:absolute;
   left:50%;top:53.2%;
-  width:2px;
-  height:43%;
+  width:36%;height:27%;
+  transform:translate(-50%,-4%) scale(.7);
   opacity:0;
-  transform-origin:50% 0;
-  background:linear-gradient(to bottom,rgba(255,253,234,.95),rgba(255,214,120,.73) 28%,rgba(255,181,59,.25) 68%,transparent);
-  filter:blur(.2px) drop-shadow(0 0 7px rgba(255,210,115,.8));
+  background:radial-gradient(ellipse 52% 100% at 50% 0%,rgba(255,246,212,.92),rgba(255,224,152,.5) 34%,rgba(255,201,98,.15) 62%,transparent 82%);
+  mix-blend-mode:screen;
+  filter:blur(5px);
 }
-.fold-beam--up{transform:rotate(180deg) scaleY(0)}
-.fold-beam--down{transform:scaleY(0)}
-.fold-beam--left{transform:rotate(47deg) scaleY(0);height:37%}
-.fold-beam--right{transform:rotate(-47deg) scaleY(0);height:37%}
-@keyframes sealIdle{50%{transform:translate(-50%,-50%) scale(1.09);opacity:.72;filter:blur(5px)}}
+
+/* ── the O and M themselves ─────────────────────────────────────────
+   letters-mask.webp is cut from the engraved letterforms in the seal,
+   so the light lands exactly on the strokes of the O and the M. */
+.letter-bloom{
+  position:absolute;
+  left:50%;top:53.05%;
+  width:27%;aspect-ratio:1;
+  z-index:15;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.55);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,248,220,.9) 0,rgba(255,229,158,.52) 26%,rgba(255,207,104,.18) 48%,transparent 70%);
+  mix-blend-mode:screen;
+  filter:blur(6px);
+  pointer-events:none;
+}
+/* Pinned to exactly the same box as .seal-badge, and masked with a cut taken
+   from seal.webp itself, so the lit strokes sit on the engraved ones. If the
+   badge geometry below ever changes, change it here in step. */
+.letter-flare{
+  position:absolute;
+  left:50%;top:53.2%;
+  width:20.8%;aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  z-index:16;
+  opacity:0;
+  mix-blend-mode:screen;
+  filter:drop-shadow(0 0 4px rgba(255,206,112,.75));
+  pointer-events:none;
+}
+.letter-flare__mask{
+  position:absolute;
+  inset:0;
+  display:block;
+  overflow:hidden;
+  -webkit-mask-image:url('assets/letters-mask.webp');
+  mask-image:url('assets/letters-mask.webp');
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+}
+.letter-flare__sweep{
+  position:absolute;
+  inset:0 -70%;
+  display:block;
+  background:linear-gradient(99deg,
+    rgba(255,224,146,.86) 0%,rgba(255,224,146,.86) 28%,
+    rgba(255,243,204,.96) 33%,rgba(255,219,136,.84) 37.5%,
+    rgba(255,198,84,.24) 41.5%,rgba(255,198,84,0) 45.5%,
+    rgba(255,198,84,0) 100%);
+  will-change:transform;
+}
+
+.seal-badge{
+  position:absolute;
+  left:50%;top:53.2%;
+  width:20.8%;aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  z-index:14;
+  border-radius:50%;
+  background:url('assets/seal.webp') center/contain no-repeat;
+  filter:drop-shadow(0 4px 10px rgba(86,52,20,.16));
+  pointer-events:none;
+}
+
 
 .seal-hotspot{
   position:absolute;
@@ -319,41 +474,85 @@ body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s eas
 }
 .seal-hotspot:hover::before,.seal-hotspot:focus-visible::before{border-color:rgba(255,229,174,.76);transform:scale(1.04)}
 
-.envelope.is-opening .seal-hotspot{pointer-events:none;animation:sealPress .52s ease both}
-.envelope.is-opening .seal-core{animation:sealCoreIgnite 1.18s ease .06s both}
-.envelope.is-opening .seal-letter-light--o{animation:letterIgnite .86s ease .12s both}
-.envelope.is-opening .seal-letter-light--m{animation:letterIgnite .86s ease .24s both}
-.envelope.is-opening .fold-beam--up{animation:beamUp 1.35s var(--ease-silk) .56s both}
-.envelope.is-opening .fold-beam--down{animation:beamDown 1.45s var(--ease-silk) .5s both}
-.envelope.is-opening .fold-beam--left{animation:beamLeft 1.4s var(--ease-silk) .61s both}
-.envelope.is-opening .fold-beam--right{animation:beamRight 1.4s var(--ease-silk) .67s both}
+/* ── opening timeline ───────────────────────────────────────────────
+   0.00  seal pressed
+   0.14  the O and M trace alight, left to right
+   0.90  light runs out along the engraved arms — slowly, and travelling
+         through the scrollwork itself rather than washing the whole band
+   2.80  light behind the paper builds, seeping through the engraving on
+         every flap
+   3.55  the top flap alone swings up, carrying the wax seal with it,
+         at a steady rate — the reference swings almost linearly
+   4.30  the flap burns out; the body follows
+   4.65  the seal fades last
+   6.30  invitation unlocked (keep OPEN_SEQUENCE_MS just past this)
 
-.envelope.is-opening .envelope-piece--top{animation:openTop 1.85s var(--ease-lux) 1.18s both}
-.envelope.is-opening .envelope-piece--left{animation:openLeft 1.42s var(--ease-lux) 1.96s both}
-.envelope.is-opening .envelope-piece--right{animation:openRight 1.42s var(--ease-lux) 1.96s both}
-.envelope.is-opening .envelope-piece--bottom{animation:openBottom 1.32s var(--ease-lux) 2.05s both}
-.envelope.is-opening .envelope-ambient{animation:ambientFade 1.62s ease 1.72s both}
-.envelope.is-opening .envelope-card{animation:cardLift 3.15s var(--ease-lux) .25s both}
+   Only the top flap moves. Nothing is cut apart, so the seal can never
+   tear. The flap stops at 44 degrees: in the reference it is only about
+   37 degrees along when the whole thing dissolves, and going further
+   makes the swing read as too quick.                                   */
+.envelope.is-opening .seal-hotspot{pointer-events:none;animation:sealPress .55s ease both}
+.envelope.is-opening .seal-core{animation:sealCoreIgnite 1.6s ease .06s both}
+
+.envelope.is-opening .letter-flare{animation:letterFlareIn .9s ease .14s both,letterSettle .6s ease 3.1s forwards,letterFlareOut .8s ease 4.6s forwards}
+.envelope.is-opening .letter-flare__sweep{animation:letterWipe 1.2s cubic-bezier(.36,.03,.22,1) .14s both}
+.envelope.is-opening .letter-bloom{animation:letterBloom 1.55s ease .48s both,letterFlareOut .9s ease 2.9s forwards}
+
+.envelope.is-opening .orn-flow{animation:ornRun 3.05s ease .9s both,lightOut .9s ease 4.05s forwards}
+.envelope.is-opening .orn-flow--left > i{animation:flowOutLeft 3.05s var(--ease-flow) .9s both}
+.envelope.is-opening .orn-flow--right > i{animation:flowOutRight 3.05s var(--ease-flow) .9s both}
+
+.envelope.is-opening .seam-wash{animation:washRun 3.05s ease .94s both,lightOut .9s ease 4.05s forwards}
+.envelope.is-opening .seam-wash--left > i{animation:flowOutLeft 3.05s var(--ease-flow) .94s both}
+.envelope.is-opening .seam-wash--right > i{animation:flowOutRight 3.05s var(--ease-flow) .94s both}
+
+.envelope.is-opening .paper-glow{animation:paperGlowIn 1.9s ease 2.8s both,lightOut 1s ease 4.75s forwards}
+.envelope.is-opening .seal-spill{animation:spillIn 1.9s ease 1.5s both,lightOut 1s ease 4.4s forwards}
+
+.envelope.is-opening .reveal-light{animation:lightBuild 2.6s ease 2.5s both,lightFadeOut 1.3s ease 4.95s both}
+.envelope.is-opening .reveal-light--inner{animation:innerLightBuild 2.5s ease 2.6s both,lightFadeOut 1.3s ease 4.95s both}
+.envelope.is-opening .flap-top__art{animation:flapBurn 1.05s ease 4.3s both}
+.envelope.is-opening .flap-glow{animation:flapGlowIn 1.25s ease 3.5s both,lightOut 1s ease 5.05s forwards}
+.envelope.is-opening .envelope-piece--sheet{animation:sheetDissolve .95s ease 4.45s both}
+.envelope.is-opening .seal-badge{animation:sealDissolve 1s ease 4.65s both}
+.envelope.is-opening .envelope-ambient{animation:ambientFade 1s ease 4.45s both}
+.envelope.is-opening .envelope-card{animation:cardLift 6.3s var(--ease-lux) .12s both}
 .envelope.is-open{visibility:hidden;pointer-events:none}
 
-@keyframes sealPress{45%{transform:translate(-50%,-50%) scale(.89)}100%{transform:translate(-50%,-50%) scale(.96);opacity:0}}
-@keyframes sealCoreIgnite{0%{opacity:.5}45%{opacity:1;transform:translate(-50%,-50%) scale(1.32);filter:blur(8px)}100%{opacity:.12;transform:translate(-50%,-50%) scale(1.7);filter:blur(14px)}}
-@keyframes letterIgnite{0%{opacity:0;transform:translate(-50%,-50%) scale(.28)}36%{opacity:1;transform:translate(-50%,-50%) scale(1.22)}72%{opacity:.88}100%{opacity:0;transform:translate(-50%,-50%) scale(1.65)}}
-@keyframes beamUp{0%{opacity:0;transform:rotate(180deg) scaleY(0)}18%{opacity:.92}68%{opacity:.75;transform:rotate(180deg) scaleY(1)}100%{opacity:0;transform:rotate(180deg) scaleY(1.08)}}
-@keyframes beamDown{0%{opacity:0;transform:scaleY(0)}15%{opacity:1}66%{opacity:.88;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1.08)}}
-@keyframes beamLeft{0%{opacity:0;transform:rotate(47deg) scaleY(0)}18%{opacity:.9}70%{opacity:.68;transform:rotate(47deg) scaleY(1)}100%{opacity:0;transform:rotate(47deg) scaleY(1.08)}}
-@keyframes beamRight{0%{opacity:0;transform:rotate(-47deg) scaleY(0)}18%{opacity:.9}70%{opacity:.68;transform:rotate(-47deg) scaleY(1)}100%{opacity:0;transform:rotate(-47deg) scaleY(1.08)}}
-@keyframes openTop{0%,12%{transform:rotateX(0) translateY(0);filter:brightness(1)}58%{transform:rotateX(68deg) translateY(-1%);filter:brightness(1.035)}100%{transform:rotateX(177deg) translateY(-3%);filter:brightness(1.06)}}
-@keyframes openLeft{0%{transform:translateX(0) rotateZ(0);opacity:1}100%{transform:translateX(-104%) rotateZ(-5deg);opacity:.08}}
-@keyframes openRight{0%{transform:translateX(0) rotateZ(0);opacity:1}100%{transform:translateX(104%) rotateZ(5deg);opacity:.08}}
-@keyframes openBottom{0%{transform:translateY(0);opacity:1}100%{transform:translateY(92%) rotateX(-8deg);opacity:.05}}
-@keyframes ambientFade{0%{opacity:1}100%{opacity:0}}
-@keyframes cardLift{0%{transform:translateY(0) scale(1)}54%{transform:translateY(-4px) scale(1.006)}100%{transform:translateY(-8px) scale(1.012)}}
+@keyframes sealIdle{50%{transform:translate(-50%,-50%) scale(1.08);opacity:.72;filter:blur(5px)}}
+@keyframes sealPress{45%{transform:translate(-50%,-50%) scale(.91)}100%{transform:translate(-50%,-50%) scale(.98);opacity:0}}
+@keyframes sealCoreIgnite{0%{opacity:.45}35%{opacity:.9;transform:translate(-50%,-50%) scale(1.12)}70%{opacity:1;transform:translate(-50%,-50%) scale(1.38);filter:blur(8px)}100%{opacity:.2;transform:translate(-50%,-50%) scale(1.6);filter:blur(13px)}}
 
-/* The first page is already fully rendered under the envelope, so the opening reveals real artwork immediately with no blank compositing frame. */
+@keyframes letterFlareIn{0%{opacity:0}20%{opacity:.98}55%{opacity:.9}100%{opacity:.8}}
+@keyframes letterWipe{0%{transform:translateX(0)}100%{transform:translateX(31%)}}
+@keyframes letterFlareOut{0%{opacity:1}100%{opacity:0}}
+@keyframes letterSettle{0%{opacity:.8}100%{opacity:.5}}
+@keyframes letterBloom{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}45%{opacity:.85}100%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+
+@keyframes ornRun{0%{opacity:0;background-color:rgba(255,216,134,0)}7%{opacity:1}58%{background-color:rgba(255,224,152,.38)}100%{opacity:1;background-color:rgba(255,236,186,.76)}}
+@keyframes washRun{0%{opacity:0}12%{opacity:.34}55%{opacity:.5}100%{opacity:.55}}
+@keyframes flowOutLeft{0%{transform:translate(2.5%,1.6%)}100%{transform:translate(-24%,-15.3%)}}
+@keyframes flowOutRight{0%{transform:translate(-2.5%,1.6%)}100%{transform:translate(24%,-15.3%)}}
+@keyframes spillIn{0%{opacity:0;transform:translate(-50%,-4%) scale(.62)}55%{opacity:.8}100%{opacity:1;transform:translate(-50%,-4%) scale(1.06)}}
+@keyframes lightOut{0%{opacity:1}100%{opacity:0}}
+
+@keyframes lightBuild{0%{opacity:0;transform:scale(.84);filter:blur(10px)}30%{opacity:.34}66%{opacity:.7;transform:scale(1.02)}100%{opacity:.95;transform:scale(1.18);filter:blur(15px)}}
+@keyframes innerLightBuild{0%{opacity:0;transform:scale(.68);filter:blur(6px)}34%{opacity:.42}72%{opacity:.88;transform:scale(1.06)}100%{opacity:1;transform:scale(1.24);filter:blur(8px)}}
+@keyframes lightFadeOut{0%{opacity:1}45%{opacity:.55}100%{opacity:0}}
+/* the flap hinges back on the card's top edge, seal riding with it */
+@keyframes flapSwing{0%{transform:rotateX(0deg)}100%{transform:rotateX(40deg)}}
+@keyframes flapBurn{0%{opacity:1;filter:brightness(1)}45%{opacity:.6;filter:brightness(1.16)}100%{opacity:0;filter:brightness(1.24)}}
+@keyframes flapGlowIn{0%{opacity:0}55%{opacity:.85}100%{opacity:1}}
+@keyframes paperGlowIn{0%{opacity:0}45%{opacity:.55}100%{opacity:.92}}
+/* the paper burns out into the light rather than swinging away */
+@keyframes sheetDissolve{0%{opacity:1;filter:brightness(1)}45%{opacity:.62;filter:brightness(1.14)}100%{opacity:0;filter:brightness(1.2)}}
+/* the seal holds a moment longer, whole and unmoved, as in the reference */
+@keyframes sealDissolve{0%{transform:translate(-50%,-50%) scale(1);opacity:1}55%{opacity:.5;transform:translate(-50%,-50%) scale(1.012)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.02)}}
+@keyframes ambientFade{0%{opacity:1}100%{opacity:0}}
+@keyframes cardLift{0%{transform:translateY(0) scale(1)}55%{transform:translateY(-4px) scale(1.006)}100%{transform:translateY(-9px) scale(1.012)}}
+
 #welcome .stage-art{opacity:1;transform:none;filter:saturate(1) contrast(1)}
 
-/* ---------- Fine texture, intentionally restrained ---------- */
 .grain{
   position:fixed;
   inset:0;
@@ -378,5 +577,4 @@ body.has-opened #welcome .lantern-layer--right{animation:lanternGlowIn 1.45s eas
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .stage-art{opacity:1;transform:none}
-  .motion-layer{display:none}
 }

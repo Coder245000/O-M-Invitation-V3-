@@ -11,6 +11,14 @@
   <title>Omer & Marwa | دعوة عقد القران</title>
 
   <link rel="preload" as="image" href="assets/cover.webp" type="image/webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/letters-mask.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/flap-top.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/paper-body.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/paper-flap.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/band-left.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/band-right.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/wash-left.webp" type="image/webp" crossorigin />
+  <link rel="preload" as="image" href="assets/wash-right.webp" type="image/webp" crossorigin />
   <link rel="preload" as="image" href="assets/hero.webp" fetchpriority="high" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -20,9 +28,8 @@
   </noscript>
 
   <main id="experience" class="experience" aria-label="دعوة عقد قران عمر ومروة">
-    <!-- 1. Welcome / hero -->
     <section id="welcome" class="stage stage--hero" aria-label="مرحباً بكم في حفل عقد القران">
-      <div class="stage-art stage-art--motion">
+      <div class="stage-art">
         <img
           class="invitation-art"
           src="assets/hero.webp"
@@ -32,48 +39,33 @@
           fetchpriority="high"
           decoding="async"
         />
-
-        <!-- Duplicate image masks let the couple and lantern light move independently while preserving the exact approved artwork. -->
-        <img class="motion-layer couple-layer" src="assets/hero.webp" alt="" aria-hidden="true" decoding="async" />
-        <img class="motion-layer lantern-layer lantern-layer--left" src="assets/hero.webp" alt="" aria-hidden="true" decoding="async" />
-        <img class="motion-layer lantern-layer lantern-layer--right" src="assets/hero.webp" alt="" aria-hidden="true" decoding="async" />
-        <div class="sunset-breathe" aria-hidden="true"></div>
       </div>
     </section>
 
-    <!-- 2. Family / invitation details -->
     <section id="families" class="stage" aria-label="تفاصيل عمر ومروة والعائلتين">
-      <div class="stage-art stage-art--motion stage-art--lanterns">
+      <div class="stage-art">
         <img
           class="invitation-art"
           src="assets/family.webp"
           width="941"
           height="1672"
           alt="تفاصيل عقد قران عمر نجل صلاح عبد الله محمد محمد صالح ومروة ابنة أمين صبري أحمد"
-         
           decoding="async"
         />
-        <img class="motion-layer lantern-layer lantern-layer--left" src="assets/family.webp" alt="" aria-hidden="true" decoding="async" />
-        <img class="motion-layer lantern-layer lantern-layer--right" src="assets/family.webp" alt="" aria-hidden="true" decoding="async" />
       </div>
     </section>
 
-    <!-- 3. Date / location. Date now reads naturally from right to left: day, month, year. -->
     <section id="date" class="stage" aria-label="التاريخ والمكان">
-      <div class="stage-art stage-art--interactive stage-art--motion stage-art--lanterns" id="dateArt">
+      <div class="stage-art stage-art--interactive" id="dateArt">
         <img
           class="invitation-art"
           src="assets/date.webp"
           width="941"
           height="1672"
           alt="تاريخ عقد القران ٢٨ نوفمبر ٢٠٢٦، بعد صلاة المغرب، في القاهرة، مصر"
-         
           decoding="async"
         />
-        <img class="motion-layer lantern-layer lantern-layer--left" src="assets/date.webp" alt="" aria-hidden="true" decoding="async" />
-        <img class="motion-layer lantern-layer lantern-layer--right" src="assets/date.webp" alt="" aria-hidden="true" decoding="async" />
 
-        <!-- The source art used an English placeholder. This overlay keeps the same placeholder meaning but displays it in Arabic. -->
         <div class="venue-arabic" aria-hidden="true">[المكان] - القاهرة، مصر</div>
 
         <div class="scratch-group" aria-label="اكشط البطاقات الذهبية لكشف التاريخ">
@@ -90,41 +82,46 @@
       </div>
     </section>
 
-    <!-- 4. Event timeline -->
     <section id="timeline" class="stage stage--last" aria-label="برنامج الحفل">
-      <div class="stage-art stage-art--motion stage-art--lanterns">
+      <div class="stage-art">
         <img
           class="invitation-art"
           src="assets/timeline.webp"
           width="941"
           height="1672"
           alt="برنامج الحفل: استقبال الضيوف، عقد القران، العشاء، والاحتفال والتصوير"
-         
           decoding="async"
         />
-        <img class="motion-layer lantern-layer lantern-layer--left" src="assets/timeline.webp" alt="" aria-hidden="true" decoding="async" />
-        <img class="motion-layer lantern-layer lantern-layer--right" src="assets/timeline.webp" alt="" aria-hidden="true" decoding="async" />
       </div>
     </section>
   </main>
 
-  <!-- Slow cinematic envelope opening. Light originates around the O and M on the seal, travels along the folds, then the envelope opens. -->
   <div id="envelope" class="envelope" role="dialog" aria-modal="true" aria-label="افتح دعوة عمر ومروة">
     <div class="envelope-ambient" aria-hidden="true"></div>
     <div class="envelope-card" id="envelopeCard" aria-hidden="true">
-      <div class="envelope-piece envelope-piece--bottom"></div>
-      <div class="envelope-piece envelope-piece--left"></div>
-      <div class="envelope-piece envelope-piece--right"></div>
-      <div class="envelope-piece envelope-piece--top"></div>
+      <div class="reveal-light" aria-hidden="true"></div>
+      <div class="reveal-light reveal-light--inner" aria-hidden="true"></div>
+
+      <div class="envelope-piece envelope-piece--sheet"></div>
 
       <div class="seal-light-system" aria-hidden="true">
-        <span class="seal-letter-light seal-letter-light--o"></span>
-        <span class="seal-letter-light seal-letter-light--m"></span>
         <span class="seal-core"></span>
-        <span class="fold-beam fold-beam--up"></span>
-        <span class="fold-beam fold-beam--down"></span>
-        <span class="fold-beam fold-beam--left"></span>
-        <span class="fold-beam fold-beam--right"></span>
+        <span class="seal-spill"></span>
+      </div>
+
+      <span class="flap-glow" aria-hidden="true"></span>
+      <span class="paper-glow paper-glow--body" aria-hidden="true"></span>
+
+      <div class="flap-top" aria-hidden="true">
+        <span class="flap-top__art"></span>
+        <span class="paper-glow paper-glow--flap"></span>
+        <span class="seam-wash seam-wash--left"><i></i></span>
+        <span class="seam-wash seam-wash--right"><i></i></span>
+        <span class="orn-flow orn-flow--left"><i></i></span>
+        <span class="orn-flow orn-flow--right"><i></i></span>
+        <span class="seal-badge"></span>
+        <span class="letter-bloom"></span>
+        <span class="letter-flare"><i class="letter-flare__mask"><i class="letter-flare__sweep"></i></i></span>
       </div>
     </div>
 

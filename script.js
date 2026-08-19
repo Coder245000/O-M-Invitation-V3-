@@ -6,6 +6,7 @@
   const openButton = document.getElementById('openInvitation');
   const envelopeCard = document.getElementById('envelopeCard');
   const stages = [...document.querySelectorAll('.stage')];
+  const OPEN_SEQUENCE_MS = 6300;
 
   stages[0]?.classList.add('is-active');
 
@@ -17,21 +18,16 @@
 
     if (navigator.vibrate) navigator.vibrate(14);
 
-    // Let the O/M light ignition and fold beams happen before scrolling is unlocked.
     window.setTimeout(() => {
       body.classList.remove('is-locked');
-    }, 3500);
-
-    window.setTimeout(() => {
       envelope.classList.add('is-open');
       envelope.setAttribute('aria-hidden', 'true');
       openButton?.setAttribute('tabindex', '-1');
-    }, 3650);
+    }, OPEN_SEQUENCE_MS);
   }
 
   openButton?.addEventListener('click', openInvitation);
 
-  // A slightly larger invisible tap target around the wax seal keeps the interaction effortless on mobile.
   envelope?.addEventListener('pointerup', (event) => {
     if (event.target === openButton || envelope.classList.contains('is-opening') || !envelopeCard) return;
     const card = envelopeCard.getBoundingClientRect();
@@ -41,7 +37,6 @@
     if (Math.hypot(event.clientX - cx, event.clientY - cy) <= radius) openInvitation();
   });
 
-  // Fade/lift each artwork as it enters. The page itself remains a continuous scroll strip.
   const stageObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting && entry.intersectionRatio > 0.18) {
@@ -51,7 +46,6 @@
   }, { threshold: [0.08, 0.18, 0.42] });
   stages.forEach(stage => stageObserver.observe(stage));
 
-  // Scratch-to-reveal gold foil.
   class ScratchZone {
     constructor(root) {
       this.root = root;
@@ -210,7 +204,6 @@
     ], { duration: 760, easing: 'ease-out' });
   });
 
-  // Development/QA convenience only: ?preview=open lets screenshots inspect the interior without touching production behavior.
   if (new URLSearchParams(window.location.search).get('preview') === 'open') {
     window.setTimeout(openInvitation, 120);
   }
