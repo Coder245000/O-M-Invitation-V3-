@@ -3,8 +3,8 @@
 
   const body = document.body;
   const envelope = document.getElementById('envelope');
-  const envelopeCard = document.getElementById('envelopeCard');
   const openButton = document.getElementById('openInvitation');
+  const envelopeCard = document.getElementById('envelopeCard');
   const stages = [...document.querySelectorAll('.stage')];
 
   stages[0]?.classList.add('is-active');
@@ -15,36 +15,43 @@
     envelope.classList.add('is-opening');
     body.classList.add('has-opened');
 
-    if (navigator.vibrate) navigator.vibrate(16);
+    if (navigator.vibrate) navigator.vibrate(14);
 
+    // Let the O/M light ignition and fold beams happen before scrolling is unlocked.
     window.setTimeout(() => {
       body.classList.remove('is-locked');
-    }, 1940);
+    }, 3500);
 
     window.setTimeout(() => {
       envelope.classList.add('is-open');
       envelope.setAttribute('aria-hidden', 'true');
-    }, 2740);
+      openButton?.setAttribute('tabindex', '-1');
+    }, 3650);
   }
 
   openButton?.addEventListener('click', openInvitation);
 
+  // A slightly larger invisible tap target around the wax seal keeps the interaction effortless on mobile.
   envelope?.addEventListener('pointerup', (event) => {
     if (event.target === openButton || envelope.classList.contains('is-opening') || !envelopeCard) return;
     const card = envelopeCard.getBoundingClientRect();
     const cx = card.left + card.width / 2;
     const cy = card.top + card.height * 0.532;
-    const radius = Math.max(52, card.width * 0.145);
+    const radius = Math.max(54, card.width * 0.145);
     if (Math.hypot(event.clientX - cx, event.clientY - cy) <= radius) openInvitation();
   });
 
+  // Fade/lift each artwork as it enters. The page itself remains a continuous scroll strip.
   const stageObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting && entry.intersectionRatio > 0.2) entry.target.classList.add('is-active');
+      if (entry.isIntersecting && entry.intersectionRatio > 0.18) {
+        entry.target.classList.add('is-active');
+      }
     }
-  }, { threshold: [0.08, 0.2, 0.45] });
+  }, { threshold: [0.08, 0.18, 0.42] });
   stages.forEach(stage => stageObserver.observe(stage));
 
+  // Scratch-to-reveal gold foil.
   class ScratchZone {
     constructor(root) {
       this.root = root;
@@ -106,30 +113,30 @@
       ctx.clearRect(0, 0, w, h);
 
       const foil = ctx.createLinearGradient(0, 0, w, h);
-      foil.addColorStop(0, '#f6e3b9');
-      foil.addColorStop(.22, '#d6ad67');
-      foil.addColorStop(.46, '#f7e8c5');
-      foil.addColorStop(.68, '#c7944f');
-      foil.addColorStop(1, '#ead1a0');
+      foil.addColorStop(0, '#f7e6bf');
+      foil.addColorStop(.2, '#d7ad68');
+      foil.addColorStop(.45, '#faedcf');
+      foil.addColorStop(.68, '#c9954e');
+      foil.addColorStop(1, '#ead2a3');
       ctx.fillStyle = foil;
       ctx.fillRect(0, 0, w, h);
 
       ctx.lineWidth = Math.max(.55, w / 210);
       for (let x = -h; x < w + h; x += Math.max(6, w / 17)) {
-        ctx.strokeStyle = 'rgba(255,251,237,.28)';
+        ctx.strokeStyle = 'rgba(255,251,237,.25)';
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x + h, h);
         ctx.stroke();
       }
 
-      const glow = ctx.createRadialGradient(w * .35, h * .2, 0, w * .35, h * .2, Math.max(w, h));
-      glow.addColorStop(0, 'rgba(255,255,255,.28)');
+      const glow = ctx.createRadialGradient(w * .34, h * .18, 0, w * .34, h * .18, Math.max(w, h));
+      glow.addColorStop(0, 'rgba(255,255,255,.31)');
       glow.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
 
-      ctx.strokeStyle = 'rgba(135,88,37,.34)';
+      ctx.strokeStyle = 'rgba(135,88,37,.3)';
       ctx.lineWidth = 1;
       ctx.strokeRect(.5, .5, Math.max(0, w - 1), Math.max(0, h - 1));
     }
@@ -147,9 +154,9 @@
 
       ctx.save();
       ctx.globalCompositeOperation = 'destination-out';
-      const soft = ctx.createRadialGradient(x, y, brush * .25, x, y, brush);
+      const soft = ctx.createRadialGradient(x, y, brush * .24, x, y, brush);
       soft.addColorStop(0, 'rgba(0,0,0,1)');
-      soft.addColorStop(.74, 'rgba(0,0,0,.98)');
+      soft.addColorStop(.73, 'rgba(0,0,0,.99)');
       soft.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = soft;
       ctx.beginPath();
@@ -158,7 +165,7 @@
       ctx.restore();
 
       const now = performance.now();
-      if (now - this.lastCheck > 180) {
+      if (now - this.lastCheck > 170) {
         this.lastCheck = now;
         this.checkProgress();
       }
@@ -173,7 +180,7 @@
         sampled += 1;
         if (data[i] < 45) transparent += 1;
       }
-      if (sampled && transparent / sampled >= .48) this.reveal();
+      if (sampled && transparent / sampled >= .46) this.reveal();
     }
 
     reveal() {
@@ -181,7 +188,7 @@
       this.revealed = true;
       this.isDrawing = false;
       this.root.classList.add('is-revealed');
-      if (navigator.vibrate) navigator.vibrate(10);
+      if (navigator.vibrate) navigator.vibrate(9);
       window.dispatchEvent(new CustomEvent('scratch:revealed'));
     }
   }
@@ -190,7 +197,7 @@
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => scratchZones.forEach(zone => zone.resize()), 140);
+    resizeTimer = window.setTimeout(() => scratchZones.forEach(zone => zone.resize()), 140);
   });
 
   window.addEventListener('scratch:revealed', () => {
@@ -200,6 +207,11 @@
       { filter: 'brightness(1)' },
       { filter: 'brightness(1.035)', offset: .48 },
       { filter: 'brightness(1)' }
-    ], { duration: 720, easing: 'ease-out' });
+    ], { duration: 760, easing: 'ease-out' });
   });
+
+  // Development/QA convenience only: ?preview=open lets screenshots inspect the interior without touching production behavior.
+  if (new URLSearchParams(window.location.search).get('preview') === 'open') {
+    window.setTimeout(openInvitation, 120);
+  }
 })();
